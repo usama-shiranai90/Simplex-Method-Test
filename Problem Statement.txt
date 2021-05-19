@@ -1,0 +1,11 @@
+SimplexCodeSample4.Simplex Method :
+Write Java code for solving maximization problems of OR using simplex method. The code should solve
+the basic maximization problem with one objective function and as many constraints as user wants to enter.
+
+31 May 2021 .
+
+
+https://github.com/kennyledet/Algorithm-Implementations/tree/master/Simplex_Method/Java/mike168m
+
+
+
