@@ -1,5 +1,10 @@
 package SimplexPackage;
-/* Z =  2100.0x1 + 6400.0x2 + 5500.0x3 + 6000.0x4
+
+import java.util.*;
+import java.util.stream.IntStream;
+
+/*
+Z =  2100.0x1 + 6400.0x2 + 5500.0x3 + 6000.0x4
 
 S1      12x1 + 8x2 + 7x3 + 8x4 + S1 ≤ 85
 S2      3x1 + 9x2 + 11x3 + 13x4 + S2 ≤ 75
@@ -8,16 +13,60 @@ S4      15x1 + 11x2 + 13x3 + 17x4 + S4 ≤ 90   */
 public class Main {
 
     public static void main(String[] args) {
-        LPModel model = new LPModel();
+        int c;
+        Scanner input = new Scanner(System.in);
+        System.out.println(("Welcome To Simplex Method Solver (Maximization)") + "\n1.Press 1 for executing existing problem sample\n2.Create your own problem(LP)");
+        c = input.nextInt();
 
-        System.out.println("model.getLsConstraint().size() = " + model.getLsConstraint().size());
-        System.out.println("model.getRsConstraint().size() = " + model.getRsConstraint().size());
-        System.out.println(model.printLPMODEL());
+        if (c == 1) {
 
-        StandardizedModel standardizedModel = new StandardizedModel(
-                model.getObjectiveFunction(), model.getLsConstraint(),
-                model.getOperatorConstraints(),model.getRsConstraint()
-        );
+/*            System.out.println("-----------------Maximization LP-Model-----------------\n" +
+                    "Z =  2100.0x1 + 6400.0x2 + 5500.0x3 + 6000.0x4\n" +
+                    "S1      12x1 + 8x2 + 7x3 + 8x4 + S1 ≤ 85\n" +
+                    "S2      3x1 + 9x2 + 11x3 + 13x4 + S2 ≤ 75\n" +
+                    "S3      4x1 +6x2 + 8x3 + 19x4 + S3 ≤ 122\n" +
+                    "S4      15x1 + 11x2 + 13x3 + 17x4 + S4 ≤ 90 \n" +
+                    "------------------------------------------------------");*/
+
+            LPModel model = new LPModel();  // Existing problem Solve Follow
+            System.out.println("model.getLsConstraint().size() = " + model.getLsConstraint().size());
+            System.out.println("model.getRsConstraint().size() = " + model.getRsConstraint().size());
+            System.out.println(model.printLPMODEL());
+
+            StandardizedModel standardizedModel = new StandardizedModel(
+                    model.getObjectiveFunction(), model.getLsConstraint(),
+                    model.getOperatorConstraints(), model.getRsConstraint()
+            );
+        } else if (c == 2) {
+//            List<Double> objectfunction  , Double[][] lconstraint , List<Double> rconstraint
+            System.out.print("Enter No of Decision Variables :");
+            int maxDecisionVar = input.nextInt();
+//            System.out.print("Enter No of Constraints Variables :");
+//            int maxConstraints = input.nextInt();
+
+
+            List<Double> objectiveFunction = new ArrayList<>();
+//            System.out.println("objectiveFunction.size() = " + objectiveFunction.size());
+
+            System.out.println("Please Enter Objective Function : ");
+
+            IntStream.iterate(1, i -> i+1).limit(maxDecisionVar).forEach(value -> {
+
+                System.out.print("For x" + (value) + ": ");
+                objectiveFunction.add( input.nextDouble());
+                value  = value + 1;
+
+            });
+
+            System.out.println("objectiveFunction.toString() = " + objectiveFunction.toString());
+//            LPModel model = new LPModel();
+
+
+
+            IntStream.range(0, 100 / 3).map(x -> x * 3).forEach(
+                    (x) -> x = x + 2);
+        }
+
 
     }
 

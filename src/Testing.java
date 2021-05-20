@@ -1,9 +1,6 @@
-import com.google.common.collect.HashBasedTable;
-import com.google.common.collect.Table;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Testing {
 
@@ -19,7 +16,7 @@ S4      15x1 + 11x2 + 13x3 + 17x4 + S4 ≤ 90
     static ArrayList<String> cols = new ArrayList<>();
     static ArrayList<ArrayList<Double>> data = new ArrayList<>();
 
-    public static void main(String[] args) {
+/*    public static void main(String[] args) {
 
         rows.addAll(Arrays.asList("S1", "S2", "S3", "S4"));
         cols.addAll(Arrays.asList("x1", "x2", "x3", "x4"));
@@ -44,8 +41,6 @@ S4      15x1 + 11x2 + 13x3 + 17x4 + S4 ≤ 90
 
         }
 
-        // setting slack variable :
-
         for (Table.Cell<String, String, Double> cell: tableForm.cellSet()){
             System.out.println(cell.getRowKey()+" "+cell.getColumnKey()+" "+cell.getValue());
         }
@@ -53,7 +48,29 @@ S4      15x1 + 11x2 + 13x3 + 17x4 + S4 ≤ 90
         System.out.println("==================\nInitial TABLE.cellSet \n==================\n" + tableForm.cellSet());
 
 
+    }*/
+
+
+    public static void main(String[] args) {
+
+        List<Double> list = new ArrayList<>(Collections.nCopies(10, 0.0));
+        IntStream.iterate(0, i->i).limit(list.size()).forEach(value -> {
+            System.out.print(list.get(value)+"  ");
+        });
 
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
