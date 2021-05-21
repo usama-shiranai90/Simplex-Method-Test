@@ -19,7 +19,6 @@ public class Main {
         c = input.nextInt();
 
         if (c == 1) {
-
 /*            System.out.println("-----------------Maximization LP-Model-----------------\n" +
                     "Z =  2100.0x1 + 6400.0x2 + 5500.0x3 + 6000.0x4\n" +
                     "S1      12x1 + 8x2 + 7x3 + 8x4 + S1 ≤ 85\n" +
@@ -41,30 +40,43 @@ public class Main {
 //            List<Double> objectfunction  , Double[][] lconstraint , List<Double> rconstraint
             System.out.print("Enter No of Decision Variables :");
             int maxDecisionVar = input.nextInt();
-//            System.out.print("Enter No of Constraints Variables :");
-//            int maxConstraints = input.nextInt();
-
+            System.out.print("Enter No of Constraints Variables :");
+            int maxConstraints = input.nextInt();
 
             List<Double> objectiveFunction = new ArrayList<>();
-//            System.out.println("objectiveFunction.size() = " + objectiveFunction.size());
+            LinkedList<LinkedList<Double>> leftConstraint = new LinkedList<>();
+            List<Double> rightConstraint = new ArrayList<>();
 
             System.out.println("Please Enter Objective Function : ");
-
-            IntStream.iterate(1, i -> i+1).limit(maxDecisionVar).forEach(value -> {
-
+            IntStream.iterate(1, i -> i + 1).limit(maxDecisionVar).forEach(value -> {
                 System.out.print("For x" + (value) + ": ");
-                objectiveFunction.add( input.nextDouble());
-                value  = value + 1;
-
+                objectiveFunction.add(input.nextDouble());
             });
 
-            System.out.println("objectiveFunction.toString() = " + objectiveFunction.toString());
-//            LPModel model = new LPModel();
 
+            IntStream.iterate(1, i -> i + 1).limit(maxConstraints).forEach(value -> {
+                leftConstraint.add(new LinkedList<>());
+                System.out.println("\nConstraint " + value + " : ");
+                IntStream.iterate(1, i -> i + 1).limit(maxDecisionVar).forEach(z -> {
+                    System.out.print("For x" + (z) + ": ");
+                    leftConstraint.get(value - 1).add(input.nextDouble());
+                });
+                System.out.println("Right-Side Constraint of x" + value + " : ");
+                rightConstraint.add(input.nextDouble());
+            });
 
+/*            System.out.println("objectiveFunction = " + objectiveFunction.toString());
 
-            IntStream.range(0, 100 / 3).map(x -> x * 3).forEach(
-                    (x) -> x = x + 2);
+            System.out.println("leftConstraint = ");
+            int count = 0;
+            for (LinkedList<Double> list : leftConstraint) {
+                System.out.println(list + " " + rightConstraint.get(count));
+                count++;
+            }*/
+
+            LPModel model = new LPModel(objectiveFunction,leftConstraint,rightConstraint);
+            System.out.println(model.printLPMODEL());
+
         }
 
 

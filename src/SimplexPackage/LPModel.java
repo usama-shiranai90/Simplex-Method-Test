@@ -4,7 +4,7 @@ import java.util.*;
 
 public class LPModel {
 
-    private int sampleTest ;
+    private int sampleTest;
     ArrayList<String> rowField = new ArrayList<>();
     ArrayList<String> columnsField = new ArrayList<>();
 
@@ -14,9 +14,9 @@ public class LPModel {
     private LinkedList<Double> rsConstraint;
     private LinkedList<Assets.OperatorConstraints> operatorConstraints;
 
-//     Existing problem solve as test.
+    //     Existing problem solve as test.
     public LPModel() {
-        sampleTest = 0 ;
+        sampleTest = 0;
         // define OBJECTIVE FUNCTION  , Matrix Constraints.
         objectiveFunction = new LinkedList<>();
         lsConstraint = new LinkedList<>();
@@ -24,22 +24,22 @@ public class LPModel {
         rsConstraint = new LinkedList<>();
 
         fillObjectiveFunction(objectiveFunction);
-        fillLeftSideConstraint(lsConstraint , null);
+        fillLeftSideConstraint(lsConstraint, null);
         fillOperator(operatorConstraints);
         fillRightSideConstraint(rsConstraint);
 
     }
 
-    public LPModel(List<Double> objectfunction  , Double[][] lconstraint , List<Double> rconstraint){
+    public LPModel(List<Double> objectfunction, LinkedList<LinkedList<Double>> lconstraint, List<Double> rconstraint) {
         sampleTest = 1;
         // define OBJECTIVE FUNCTION  , Matrix Constraints.
         objectiveFunction = new LinkedList<>(objectfunction);  // copies objective function ref here
-        lsConstraint = new LinkedList<>();   // we need to call fillLeftSideConstraint to properly implement it.
+        lsConstraint = new LinkedList<>(lconstraint);   // we need to call fillLeftSideConstraint to properly implement it.
         operatorConstraints = new LinkedList<>();  // simply (fillOperator) call function.
         rsConstraint = new LinkedList<>(rconstraint); // copies right side constraint here.
 
 
-        fillLeftSideConstraint(lsConstraint , lconstraint);
+//        fillLeftSideConstraint(lsConstraint , lconstraint);
         fillOperator(operatorConstraints);
 
     }
@@ -50,9 +50,9 @@ public class LPModel {
         of.addAll(Arrays.asList(2100.0, 6400.0, 5500.0, 6000.0));
     }
 
-    public void fillLeftSideConstraint(LinkedList<LinkedList<Double>> lsConstraint , Double[][] constraintLeftSide) {
+    public void fillLeftSideConstraint(LinkedList<LinkedList<Double>> lsConstraint, Double[][] constraintLeftSide) {
 
-        if (getSampleTest() == 0){
+        if (getSampleTest() == 0) {
             constraintLeftSide = new Double[][]{
                     {12.0, 8.0, 7.0, 8.0}              // [4][4]
                     , {3.0, 9.0, 11.0, 13.0}
@@ -95,39 +95,38 @@ public class LPModel {
 
         builder.append("\nSubject to = \n");
 
-        int row = 0;
-        int col = 0;
-        for (int i = 0; i < ( (lsConstraint.size() * rsConstraint.size()) + operatorConstraints.size() ); i++) {  // doesnt work on 16 iteration.
-/*            if (col == 4) {
-                col = 0;
-                row++;
+        for (int rowIndex = 0; rowIndex < lsConstraint.size(); rowIndex++) {  // doesnt work on 16 iteration.
 
-            }
-            builder.append(lsConstraint.get(row).get(col)).append("x").append(col + 1);
-            col++;
+            for (int itemInRow = 0; itemInRow < lsConstraint.get(rowIndex).size(); itemInRow++) {
+                builder.append(lsConstraint.get(rowIndex).get(itemInRow)).append("x").append(itemInRow + 1).append(" ");
 
-            if (i != objectiveFunction.size() - 1) {
-                builder.append(" + ");
-            }
-
-            // ajeeb
-            builder.append(operatorConstraints.get(2)).append("   ")
-                    .append(rsConstraint.get()).append("\n");*/
-            if (col < 4) {
-                builder.append(lsConstraint.get(row).get(col)).append("x").append(col + 1).append(" ");
-                col++;
-                if ( col < 4 ) {  // i != objectiveFunction.size() - 1
+                if (itemInRow < lsConstraint.get(rowIndex).size() - 1) {  // i != objectiveFunction.size() - 1
                     builder.append(" + ");
                 }
-                if (col == 4) {
+                if (itemInRow == lsConstraint.get(rowIndex).size() -1) { // 2 == 2
+                    builder.append(operatorConstraints.get(2)).append("  ")
+                            .append(rsConstraint.get(rowIndex)).append("\n");
+                }
+            }
+
+            /*if (col < lsConstraint.size()) {
+                System.out.println("chla");
+                builder.append(lsConstraint.get(row).get(col)).append("x").append(col + 1).append(" ");
+
+                if (col < lsConstraint.get(row).size() -1) {  // i != objectiveFunction.size() - 1
+                    builder.append(" + ");
+                }
+                if (col == lsConstraint.get(row).size() -1) { // 2 == 2
                     builder.append(operatorConstraints.get(2)).append("  ")
                             .append(rsConstraint.get(row)).append("\n");
                 }
+                col++;
             }
             else {
-                col = 0 ;
+                col = 0;
                 row++;
-            }
+//                --i;*/
+//            }
         }
         return builder.toString();
     }
