@@ -9,30 +9,20 @@ import java.util.LinkedList;
  */
 public class StandardizedModel {
 
-    private int totalNoConstraints;  // number of constraints  -> e.g by calling size of ls_con or rs_con method.
-    private int totalFunctionVariables;  // number of original variables   ->  Objective function ka variables ko show kary ga.
     private ArrayList<ArrayList<Double>> tableaux;
 
-    private String[] rowField;
-    private String[] columnField;
+    public StandardizedModel(LinkedList<Double> objectiveFunction, LinkedList<LinkedList<Double>> lsConstraint, LinkedList<Double> rsConstraint) {
 
-    public StandardizedModel() {
-
-    }
-
-    public StandardizedModel(LinkedList<Double> objectiveFunction, LinkedList<LinkedList<Double>> lsConstraint,
-                             LinkedList<Double> rsConstraint) {
-
-        totalNoConstraints = rsConstraint.size();
-        totalFunctionVariables = objectiveFunction.size();
+        int totalNoConstraints = rsConstraint.size();
+        int totalFunctionVariables = objectiveFunction.size();
         tableaux = new ArrayList<>();                 /**
          * Original = [4][4]  -> but we need to add slack-variables:
          *  if 4 constraints then 4 slack
          *  1 for right side constraint.   [4] [9]
          */
 
-        rowField = new String[totalNoConstraints + 1];// addition 1 for Cj-Zj
-        columnField = new String[totalFunctionVariables + totalNoConstraints + 1];
+        String[] rowField = new String[totalNoConstraints + 1];// addition 1 for Cj-Zj
+        String[] columnField = new String[totalFunctionVariables + totalNoConstraints + 1];
 
         int slackIncrement = totalFunctionVariables;
 
@@ -54,9 +44,7 @@ public class StandardizedModel {
                         tableaux.get(row).add(objectiveFunction.get(column));
                     else
                         tableaux.get(row).add(0.0);
-                }
-
-                else if (column < totalFunctionVariables) {      // for adding left constraints.
+                } else if (column < totalFunctionVariables) {      // for adding left constraints.
 
                     tableaux.get(row).add(lsConstraint.get(row).get(column));
                     columnField[column] = "x" + (column + 1);
@@ -82,34 +70,15 @@ public class StandardizedModel {
 
         }
 
-        show();
+
+        SimplexSolver simplexSolver = new SimplexSolver(tableaux, totalFunctionVariables, totalNoConstraints, rowField, columnField);
+        simplexSolver.solve();
     }
 
-
-    public int getTotalNoConstraints() {
-        return totalNoConstraints;
-    }
-
-    public int getTotalFunctionVariables() {
-        return totalFunctionVariables;
-    }
 
     public ArrayList<ArrayList<Double>> getTableaux() {
         return tableaux;
     }
 
-    public void show() {
-
-        for (int i = 0; i <= totalNoConstraints; i++) {
-            System.out.print(rowField[i] + "   ");
-            for (int j = 0; j <= totalNoConstraints + totalFunctionVariables; j++) {
-
-                System.out.printf("%7.2f ", tableaux.get(i).get(j));
-            }
-            System.out.println();
-        }
-
-
-    }
 
 }
